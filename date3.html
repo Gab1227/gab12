@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Date Planner</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #fff0f5;
+      color: #d63384;
+    }
+    h1, h2 {
+      margin: 20px;
+      font-size: 3em;
+    }
+    p, button, label, select {
+      font-size: 1.5em;
+    }
+    button {
+      background-color: #ff69b4;
+      border: none;
+      color: white;
+      padding: 15px 30px;
+      font-size: 1.5em;
+      margin: 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #d63384;
+    }
+    .food-option, .movie-option, .gifs {
+      display: none;
+      margin: 20px;
+    }
+    img {
+      width: 150px;
+      height: auto;
+      margin: 10px;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>💖 Plan Your Perfect Date 💖</h1>
+  <img src="https://media.giphy.com/media/3o7TKU8RvQuomFfUUU/giphy.gif" alt="Love Gif" width="300">
+  <h2>Would you like to plan a romantic date? 🥰</h2>
+  <button onclick="startPlanning()">Yes, let’s do it! 💕</button>
+
+  <div id="date-section" style="display: none;">
+    <h2>When is the special day? 🗓️</h2>
+    <select id="date"></select>
+    <button onclick="setDate()">Set Date</button>
+  </div>
+
+  <div id="time-section" style="display: none;">
+    <h2>What time is the date? ⏰</h2>
+    <select id="time"></select>
+    <button onclick="setTime()">Set Time</button>
+  </div>
+
+  <div id="food-section" class="food-option">
+  <h2>Choose your favorite Filipino fast foods for the date 🍴</h2>
+  <div>
+    <label>
+      <input type="checkbox" value="Jollibee Chickenjoy"> 
+      <img src="https://imgur.com/0aD99YE" alt="Jollibee Chickenjoy">
+      Jollibee Chickenjoy
+    </label>
+    <label>
+      <input type="checkbox" value="McDonald's Burger McDo"> 
+      <img src="https://imgur.com/gythUjE" alt="McDonald's Burger McDo">
+      McDonald's Burger McDo
+    </label>
+    <label>
+      <input type="checkbox" value="Chowking Halo-Halo"> 
+      <img src="https://imgur.com/WtiBiFm" alt="Chowking Halo-Halo">
+      Chowking Halo-Halo
+    </label>
+    <label>
+      <input type="checkbox" value="Mang Inasal Chicken Inasal"> 
+      <img src="https://imgur.com/wG4EFQI" alt="Mang Inasal Chicken Inasal">
+      Mang Inasal Chicken Inasal
+    </label>
+  </div>
+  <button onclick="setFood()">Choose Food</button>
+</div>
+
+  <div id="movie-section" class="movie-option">
+    <h2>What movie or show will you watch? 🎬</h2>
+    <select id="movie">
+      <option value="Cobra Kai (Season 6 - Part 2)">Cobra Kai (Season 6 - Part 2)</option>
+      <option value="Un/Happy For You">Un/Happy For You</option>
+      <option value="Zombieverse (Season 2)">Zombieverse (Season 2)</option>
+      <option value="Beyond Goodbye">Beyond Goodbye</option>
+    </select>
+    <button onclick="setMovie()">Choose Movie</button>
+  </div>
+
+  <div id="excitement-section" style="display: none;">
+    <h2>How excited are you for this date? 😍</h2>
+    <input type="range" id="excitement" min="1" max="10" value="5">
+    <p>Your Excitement Level: <span id="level">5</span>/10</p>
+    <button onclick="setExcitement()">Set Excitement Level</button>
+  </div>
+
+  <div id="reminder-section" style="display: none;">
+    <h2>💌 Here’s your date plan! 💌</h2>
+    <p id="reminder-text"></p>
+    <img src="https://media.giphy.com/media/Zd1eQAEOOEpMI/giphy.gif" alt="Excited Gif" width="300">
+  </div>
+
+  <script>
+    let date, time, food = [], movie;
+
+    function startPlanning() {
+      document.querySelector('h2').style.display = 'none';
+      document.querySelector('button').style.display = 'none';
+      generateDateOptions();
+      generateTimeOptions();
+      document.getElementById('date-section').style.display = 'block';
+    }
+
+    function generateDateOptions() {
+      const dateSelect = document.getElementById('date');
+      const today = new Date();
+      for (let i = 0; i < 7; i++) {
+        const futureDate = new Date(today);
+        futureDate.setDate(today.getDate() + i);
+        const option = document.createElement('option');
+        option.value = futureDate.toISOString().split('T')[0];
+        option.textContent = futureDate.toDateString();
+        dateSelect.appendChild(option);
+      }
+    }
+
+    function generateTimeOptions() {
+      const timeSelect = document.getElementById('time');
+      for (let hour = 0; hour < 24; hour++) {
+        const option = document.createElement('option');
+        const ampm = hour >= 12 ? 'PM' : 'AM';
+        const formattedHour = hour % 12 || 12;
+        option.value = `${formattedHour}:00 ${ampm}`;
+        option.textContent = `${formattedHour}:00 ${ampm}`;
+        timeSelect.appendChild(option);
+      }
+    }
+
+    function setDate() {
+      date = document.getElementById('date').value;
+      if (date) {
+        document.getElementById('date-section').style.display = 'none';
+        document.getElementById('time-section').style.display = 'block';
+      } else {
+        alert('Please choose a date.');
+      }
+    }
+
+    function setTime() {
+      time = document.getElementById('time').value;
+      if (time) {
+        document.getElementById('time-section').style.display = 'none';
+        document.getElementById('food-section').style.display = 'block';
+      } else {
+        alert('Please choose a time.');
+      }
+    }
+
+    function setFood() {
+      const selectedFoods = document.querySelectorAll('#food-section input:checked');
+      if (selectedFoods.length) {
+        food = Array.from(selectedFoods).map(item => item.value);
+        document.getElementById('food-section').style.display = 'none';
+        document.getElementById('movie-section').style.display = 'block';
+      } else {
+        alert('Please select at least one food option.');
+      }
+    }
+
+    function setMovie() {
+      movie = document.getElementById('movie').value;
+      document.getElementById('movie-section').style.display = 'none';
+      document.getElementById('excitement-section').style.display = 'block';
+    }
+
+    function setExcitement() {
+      const excitementLevel = document.getElementById('excitement').value;
+      document.getElementById('level').innerText = excitementLevel;
+      document.getElementById('excitement-section').style.display = 'none';
+      const reminder = `
+        Your date is set for ${date} at ${time}. Enjoy delicious ${food.join(', ')} 
+        and watch "${movie}". Have a fantastic time! 💖
+      `;
+      document.getElementById('reminder-text').innerText = reminder;
+      document.getElementById('reminder-section').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
